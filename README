@@ -3,3 +3,5 @@ i made this because i wanted a simple agent harness that didn't stop until a lon
 tenacity-harness takes one task and loops on it. each tick it reads who it is, what it's working on, what it remembers, and what i whispered to it, then asks a local ollama model what to do next. it runs shell commands, updates its own memory, and keeps ticking. it only stops when the model wraps a short summary in a done block, or when it hits max ticks as a safety net.
 
 soul.md is who it is. task.md is the long-horizon thing you want done. memory.md is its scratchpad across ticks. heartbeat.md is what i say to it each tick. log.txt is every thought and action, append-only.
+
+enjoy
