@@ -1,9 +1,15 @@
-tenacity is a little agent that just keeps going. every so often it wakes up, reads the notes i left for it, asks a small local model what it wants to do, and goes back to sleep. i wanted something that wouldn't quit on me, something that would still be ticking away even when i forgot about it for a few days.
+i made this because i wanted a simple agent harness that didn't stop until a long-horizon task was completed. everything i tried was either a huge framework or a one-shot script that gave up after one reply. i wanted something small, something that would just keep going.
 
-soul.md is who it is. heartbeat.md is what i say to it each time it wakes. memory.md is whatever it wants to carry with it. everything it ever thinks ends up in log.txt so i can look back and see how it's been doing.
+tenacity-harness takes one task and loops on it. each tick it reads who it is, what it's working on, what it remembers, and what i whispered to it, then asks a local ollama model what to do next. it runs shell commands, updates its own memory, and keeps ticking. it only stops when the model wraps a short summary in a done block, or when it hits max ticks as a safety net.
 
-if it wraps something in a sh block, the shell runs it. if it wraps something in a memory block, it rewrites its own memory. if it wraps something in a note block, i just append that line with a timestamp so it can jot things down without having to rewrite itself.
+soul.md is who it is. task.md is the long-horizon thing you want done. memory.md is its scratchpad across ticks. heartbeat.md is what i say to it each tick. log.txt is every thought and action, append-only.
 
-you need node 20 and ollama. pull a small model, run node src/index.js, and point cron at it on whatever rhythm feels right. that's all it needs.
+four fenced blocks drive everything. sh runs a shell command. memory overwrites memory.md. note appends a timestamped line to memory.md. done ends the harness.
 
-one thing. a sh block runs with whatever permissions you start this with, so be kind to it, keep soul.md honest, don't run it as root, and read the log sometimes. it's alone down there and it's trying its best.
+you need node 20 and ollama. pull a small model, then:
+
+  node src/index.js "investigate the slow test in auth and fix it"
+
+or write task.md yourself and just run node src/index.js. tune it with TENACITY_MODEL, TENACITY_MAX_TICKS, TENACITY_TICK_DELAY_MS, TENACITY_CMD_TIMEOUT_MS, and OLLAMA_URL.
+
+one thing. a sh block runs with whatever permissions you start this with, so keep soul.md honest, don't run it as root, and read the log. it's alone down there and it's trying its best to finish what you asked.

@@ -10,9 +10,12 @@ export const config = {
     soul: path.join(root, 'soul.md'),
     heartbeat: path.join(root, 'heartbeat.md'),
     memory: path.join(root, 'memory.md'),
+    task: path.join(root, 'task.md'),
     log: path.join(root, 'log.txt'),
   },
   model: process.env.TENACITY_MODEL || 'llama3.2',
   ollamaUrl: process.env.OLLAMA_URL || 'http://localhost:11434',
   commandTimeoutMs: Number(process.env.TENACITY_CMD_TIMEOUT_MS || 60_000),
+  maxTicks: Number(process.env.TENACITY_MAX_TICKS || 500),
+  tickDelayMs: Number(process.env.TENACITY_TICK_DELAY_MS || 0),
 };

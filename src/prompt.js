@@ -9,11 +9,21 @@ async function readIfExists(filePath) {
   }
 }
 
-export async function buildPrompt(paths) {
-  const parts = await Promise.all([
+export async function buildPrompt(paths, { tick, maxTicks } = {}) {
+  const [soul, heartbeat, memory, task] = await Promise.all([
     readIfExists(paths.soul),
     readIfExists(paths.heartbeat),
     readIfExists(paths.memory),
+    readIfExists(paths.task),
   ]);
-  return parts.map((s) => s.trim()).filter(Boolean).join('\n\n');
+
+  const sections = [
+    soul.trim(),
+    task.trim() && `# the task\n${task.trim()}`,
+    memory.trim() && `# memory\n${memory.trim()}`,
+    heartbeat.trim(),
+    tick != null && `# tick ${tick} of ${maxTicks}`,
+  ];
+
+  return sections.filter(Boolean).join('\n\n');
 }

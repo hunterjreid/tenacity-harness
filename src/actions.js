@@ -42,4 +42,12 @@ export async function processResponse(response, { memoryPath, log, commandTimeou
 
   const note = extractFence(response, 'note');
   if (note) await appendNote(note, { memoryPath, log });
+
+  const done = extractFence(response, 'done');
+  if (done !== null) {
+    await log(`--- task declared done ---\n${done}`);
+    return { done: true, reason: done };
+  }
+
+  return { done: false };
 }

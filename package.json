@@ -1,15 +1,15 @@
 {
-  "name": "tenacity",
+  "name": "tenacity-harness",
   "version": "0.1.0",
-  "description": "A small agent that just keeps going. Wakes on a heartbeat, thinks, acts, remembers. Node + Ollama.",
+  "description": "A tiny agent harness that doesn't stop until the long-horizon task is done. Node + Ollama.",
   "type": "module",
   "main": "src/index.js",
   "bin": {
-    "tenacity": "src/index.js"
+    "tenacity-harness": "src/index.js"
   },
   "scripts": {
     "start": "node src/index.js",
-    "tick": "node src/index.js"
+    "run": "node src/index.js"
   },
   "engines": {
     "node": ">=20"

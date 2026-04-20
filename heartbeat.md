@@ -1,7 +1,9 @@
-your scheduled heartbeat has just fired. reread your memory, look at the moment, and decide whether to act.
+you are working on the task above. keep going until it is finished.
 
-wrap a shell command in a ```sh fenced block to run it.
-wrap a short line in a ```note fenced block to append it to memory with a timestamp.
-wrap the full new contents of memory in a ```memory fenced block to overwrite it.
+each tick, look at the task, your memory, and anything already in the log. decide the next small step.
 
-anything outside those blocks is just logged. feel free to think out loud.
+wrap a shell command in a ```sh block to execute it. wrap a single line in a ```note block to append a timestamped entry to memory. wrap the full new contents of memory in a ```memory block to overwrite it.
+
+when the task is genuinely complete, wrap a short summary in a ```done block and the harness will stop. do not declare done early.
+
+anything outside those blocks is just thinking out loud.
