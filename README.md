@@ -1,80 +1,11 @@
-# thrumloom
+thrumloom is a tiny autonomous llm agent that wakes up on a heartbeat, reads three markdown files, asks a local ollama model what to do, and goes back to sleep. it has no framework and no dependencies beyond node 20 and a working ollama install.
 
-A tiny autonomous LLM agent that runs on a heartbeat. No framework, no dependencies — just Node.js and a local [Ollama](https://ollama.com) install.
+the three files are soul.md for identity, heartbeat.md for the recurring prompt, and memory.md for whatever the agent wants to carry forward. everything the model says is appended to log.txt, so nothing is ever lost.
 
-Every time the heartbeat fires, the agent reads its identity, its instructions, and its memory, asks a local model what to do, and optionally runs a shell command or rewrites its memory.
+the agent only does two kinds of things. if the model writes a fenced sh block it gets executed via the system shell, with stdout and stderr piped into the log. if the model writes a fenced memory block, memory.md is overwritten with its contents.
 
-## files
+there is also a fenced note block, which appends a single timestamped line to memory.md instead of overwriting it. use it for quick observations the agent wants to remember without rewriting everything it already knows.
 
-| file | purpose |
-| --- | --- |
-| `soul.md` | identity and behavioural rules |
-| `heartbeat.md` | the prompt sent to the model on every tick |
-| `memory.md` | persistent memory — the model may overwrite this |
-| `log.txt` | append-only transcript of every tick |
-| `src/index.js` | entry point — wires everything together |
-| `src/prompt.js` | builds the prompt from the three markdown files |
-| `src/ollama.js` | calls the local Ollama HTTP API |
-| `src/actions.js` | parses fenced blocks and runs shell / updates memory |
-| `src/logger.js` | append-only logger |
-| `src/config.js` | paths, model name, environment overrides |
+install ollama, pull a small model like llama3.2, clone the repo, and run node src/index.js to fire a single heartbeat. hook src/index.js into cron or task scheduler to have it tick on whatever rhythm you like. the default model name is llama3.2, the default ollama endpoint is http://localhost:11434, and the default per-command timeout is sixty seconds; override them with THRUMLOOM_MODEL, OLLAMA_URL, and THRUMLOOM_CMD_TIMEOUT_MS respectively.
 
-## setup
-
-```bash
-# 1. install ollama
-curl -fsSL https://ollama.com/install.sh | sh
-
-# 2. pull a model
-ollama pull llama3.2
-
-# 3. clone and enter this repo
-git clone https://github.com/hunterjreid/thrumloom.git
-cd thrumloom
-
-# 4. optional: override the model
-export THRUMLOOM_MODEL=llama3.2
-```
-
-Node 20 or newer is required.
-
-## running
-
-One-shot tick:
-
-```bash
-node src/index.js
-```
-
-Schedule it every 30 minutes with cron:
-
-```cron
-*/30 * * * * /usr/bin/node /path/to/thrumloom/src/index.js
-```
-
-On Windows, use Task Scheduler to run the same command.
-
-## how the agent acts
-
-The agent's output is logged verbatim. Two fenced-block conventions turn text into action:
-
-- ` ```sh ` — the block contents are executed via the system shell; stdout and stderr are appended to `log.txt`.
-- ` ```memory ` — the block contents fully replace `memory.md`.
-
-Anything outside those blocks is ignored, so the model can freely think out loud.
-
-## environment variables
-
-| var | default | purpose |
-| --- | --- | --- |
-| `THRUMLOOM_MODEL` | `llama3.2` | Ollama model name |
-| `OLLAMA_URL` | `http://localhost:11434` | Ollama HTTP endpoint |
-| `THRUMLOOM_CMD_TIMEOUT_MS` | `60000` | per-command timeout for `sh` blocks |
-
-## safety
-
-The agent runs shell commands with the privileges of whoever starts it. Read `soul.md` carefully, keep the model small, review `log.txt` regularly, and don't run this as root.
-
-## license
-
-MIT — see [LICENSE](./LICENSE).
+remember that anything the model emits in a sh block runs with the privileges of whoever launched the heartbeat, so keep soul.md strict, keep the model small, and do not run this as root. the log is the only source of truth for what the agent has been up to. read it.

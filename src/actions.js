@@ -1,4 +1,4 @@
-import { writeFile } from 'node:fs/promises';
+import { writeFile, appendFile } from 'node:fs/promises';
 import { exec } from 'node:child_process';
 import { promisify } from 'node:util';
 
@@ -22,9 +22,15 @@ async function runShell(cmd, { log, timeoutMs }) {
   }
 }
 
-async function updateMemory(content, { memoryPath, log }) {
+async function overwriteMemory(content, { memoryPath, log }) {
   await writeFile(memoryPath, content + '\n', 'utf8');
-  await log('--- memory updated ---');
+  await log('--- memory rewritten ---');
+}
+
+async function appendNote(content, { memoryPath, log }) {
+  const stamp = new Date().toISOString();
+  await appendFile(memoryPath, `- [${stamp}] ${content}\n`, 'utf8');
+  await log('--- note appended ---');
 }
 
 export async function processResponse(response, { memoryPath, log, commandTimeoutMs }) {
@@ -32,5 +38,8 @@ export async function processResponse(response, { memoryPath, log, commandTimeou
   if (shell) await runShell(shell, { log, timeoutMs: commandTimeoutMs });
 
   const memory = extractFence(response, 'memory');
-  if (memory !== null) await updateMemory(memory, { memoryPath, log });
+  if (memory !== null) await overwriteMemory(memory, { memoryPath, log });
+
+  const note = extractFence(response, 'note');
+  if (note) await appendNote(note, { memoryPath, log });
 }
