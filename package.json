@@ -1,0 +1,26 @@
+{
+  "name": "thrumloom",
+  "version": "0.1.0",
+  "description": "A tiny autonomous LLM agent that runs on a heartbeat. No framework, just Node and Ollama.",
+  "type": "module",
+  "main": "src/index.js",
+  "bin": {
+    "thrumloom": "src/index.js"
+  },
+  "scripts": {
+    "start": "node src/index.js",
+    "tick": "node src/index.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "license": "MIT",
+  "author": "Hunter Reid <hunterjreid@gmail.com>",
+  "keywords": [
+    "agent",
+    "llm",
+    "ollama",
+    "autonomous",
+    "heartbeat"
+  ]
+}
