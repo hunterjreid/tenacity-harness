@@ -1,11 +1,11 @@
 {
-  "name": "thrumloom",
+  "name": "tenacity",
   "version": "0.1.0",
-  "description": "A tiny autonomous LLM agent that runs on a heartbeat. No framework, just Node and Ollama.",
+  "description": "A small agent that just keeps going. Wakes on a heartbeat, thinks, acts, remembers. Node + Ollama.",
   "type": "module",
   "main": "src/index.js",
   "bin": {
-    "thrumloom": "src/index.js"
+    "tenacity": "src/index.js"
   },
   "scripts": {
     "start": "node src/index.js",

@@ -12,7 +12,7 @@ export const config = {
     memory: path.join(root, 'memory.md'),
     log: path.join(root, 'log.txt'),
   },
-  model: process.env.THRUMLOOM_MODEL || 'llama3.2',
+  model: process.env.TENACITY_MODEL || 'llama3.2',
   ollamaUrl: process.env.OLLAMA_URL || 'http://localhost:11434',
-  commandTimeoutMs: Number(process.env.THRUMLOOM_CMD_TIMEOUT_MS || 60_000),
+  commandTimeoutMs: Number(process.env.TENACITY_CMD_TIMEOUT_MS || 60_000),
 };

@@ -1,0 +1,9 @@
+tenacity is a little agent that just keeps going. every so often it wakes up, reads the notes i left for it, asks a small local model what it wants to do, and goes back to sleep. i wanted something that wouldn't quit on me, something that would still be ticking away even when i forgot about it for a few days.
+
+soul.md is who it is. heartbeat.md is what i say to it each time it wakes. memory.md is whatever it wants to carry with it. everything it ever thinks ends up in log.txt so i can look back and see how it's been doing.
+
+if it wraps something in a sh block, the shell runs it. if it wraps something in a memory block, it rewrites its own memory. if it wraps something in a note block, i just append that line with a timestamp so it can jot things down without having to rewrite itself.
+
+you need node 20 and ollama. pull a small model, run node src/index.js, and point cron at it on whatever rhythm feels right. that's all it needs.
+
+one thing. a sh block runs with whatever permissions you start this with, so be kind to it, keep soul.md honest, don't run it as root, and read the log sometimes. it's alone down there and it's trying its best.
