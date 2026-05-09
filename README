@@ -1,7 +1,13 @@
-i made this because i wanted a simple agent harness that didn't stop until a long-horizon task was completed. everything i tried was either a huge framework or a one-shot script that gave up after one reply. i wanted something small, something that would just keep going.
+tenacity-harness
 
-tenacity-harness takes one task and loops on it. each tick it reads who it is, what it's working on, what it remembers, and what i whispered to it, then asks a local ollama model what to do next. it runs shell commands, updates its own memory, and keeps ticking. it only stops when the model wraps a short summary in a done block, or when it hits max ticks as a safety net.
+one script. one soul file. one long-horizon task.
 
-soul.md is who it is. task.md is the long-horizon thing you want done. memory.md is its scratchpad across ticks. heartbeat.md is what i say to it each tick. log.txt is every thought and action, append-only.
+usage:
 
-enjoy
+    node src/index.js "your task"
+
+soul.md is the agent. log.txt is its history. that's it.
+
+env: TENACITY_MODEL, OLLAMA_URL, TENACITY_MAX_TICKS, TENACITY_TICK_TIMEOUT_MS, TENACITY_CMD_TIMEOUT_MS, TENACITY_TICK_DELAY_MS.
+
+tools: shell, write_soul, append_soul, read_file, write_file, list_files, done.
